@@ -18,7 +18,6 @@ bot.
 import logging
 import os
 import re
-import string
 from dotenv import load_dotenv
 
 from telegram import ForceReply, Update
