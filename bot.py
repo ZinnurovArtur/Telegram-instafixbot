@@ -17,12 +17,19 @@ bot.
 
 import logging
 import os
+import string
 from dotenv import load_dotenv
 
 from telegram import ForceReply, Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
 
-load_dotenv() 
+load_dotenv()
 # Enable logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -49,22 +56,28 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text("Help!")
 
 
-
-async def sendInsta(update: Update, url):
-    await update.message.reply_text('neger')
+async def sendInsta(update: Update, url: string):
+    await update.message.reply_text("neger")
 
 
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(os.getenv('TELEGRAM_TOKEN')).build()
+    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
 
     # on non command i.e message - echo the message on Telegram
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, sendInsta))
+    application.add_handler(
+        MessageHandler(
+            filters.TEXT
+            & filters.Regex(r"^https://www\.instagram\.com/")
+            & (filters.Entity("url") | filters.Entity("text_link")),
+            sendInsta,
+        )
+    )
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling(allowed_updates=Update.ALL_TYPES)
