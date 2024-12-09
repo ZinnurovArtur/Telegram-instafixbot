@@ -17,6 +17,7 @@ bot.
 
 import logging
 import os
+import re
 import string
 from dotenv import load_dotenv
 
@@ -56,8 +57,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text("Help!")
 
 
-async def sendInsta(update: Update, url: string):
-    await update.message.reply_text("neger")
+async def sendInsta(update: Update,context: ContextTypes.DEFAULT_TYPE):
+    raw_text = update.message.text
+    filtered_insta = re.sub(r"^https://www\.instagram\.com/","https://artur-dd.fly.dev/",raw_text)
+    await update.message.reply_text(filtered_insta)
 
 
 def main() -> None:
