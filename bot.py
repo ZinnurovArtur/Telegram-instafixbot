@@ -65,7 +65,7 @@ async def sendInsta(update: Update,context: ContextTypes.DEFAULT_TYPE):
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()
+    application = Application.builder().token(os.environ['TELEGRAM_TOKEN']).build()
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
