@@ -3,6 +3,7 @@ FROM python:3.9.13-slim-buster
 WORKDIR /telegram-instafix
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
+
 COPY . .
 
-RUN  "python bot.py"
+ENTRYPOINT [ "python","bot.py" ] 
