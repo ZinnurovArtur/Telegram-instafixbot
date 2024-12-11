@@ -3,16 +3,10 @@
 # This program is dedicated to the public domain under the CC0 license.
 
 """
-Simple Bot to reply to Telegram messages.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Application and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
+Simple Bot to  convert the Instagram reels link to embeded link for telegram or discord
 
 Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
+Send instagram reel link and bot reply you with embeded video or photo
 """
 
 import logging
@@ -58,7 +52,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def sendInsta(update: Update,context: ContextTypes.DEFAULT_TYPE):
     raw_text = update.message.text
-    filtered_insta = re.sub(r"^https://www\.instagram\.com/","https://artur-dd.fly.dev/",raw_text)
+    filtered_insta = re.sub(r"^https://www\.instagram\.com/",os.environ['SERVER_URL'],raw_text)
     await update.message.reply_text(filtered_insta)
 
 
