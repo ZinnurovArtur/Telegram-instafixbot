@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/5e83fc8d-f518-4829-99ed-405a19701f0e
 
 ## Cloud - using the Fly.io 
 1. Generate a token from [BotFather](https://telegram.me/BotFather)
-2. Use an example from [InstaFix](http://handlebarsjs.com/](https://github.com/Wikidepia/InstaFix)) of deploying your own ddinstagram
+2. Use an example from [InstaFix](https://github.com/Wikidepia/InstaFix) of deploying your own ddinstagram
 3. For the deploying your telegram bot using fly.io install `flyctl` and run `fly launch`
 4. Use `fly.toml` config for telegram bot
 5. Use `SERVER_URL=<provided from Fly.io>` and put the required env parameters to the Fly.io [secrets](https://fly.io/docs/apps/secrets/)
