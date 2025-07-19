@@ -14,7 +14,7 @@ import os
 import re
 from dotenv import load_dotenv
 
-from telegram import ForceReply, Update
+from telegram import ForceReply, Update ,Bot
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -33,6 +33,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
+bot_last_message = {}
+
 
 # Define a few command handlers. These usually take the two arguments update and
 # context.
@@ -50,16 +52,29 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text("Help!")
 
 
-async def sendInsta(update: Update,context: ContextTypes.DEFAULT_TYPE):
+async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if bot_last_message:
+        bot_last_message.clear()
     raw_text = update.message.text
-    filtered_insta = re.sub(r"^https://www\.instagram\.com/",os.environ['SERVER_URL'],raw_text)
-    await update.message.reply_text(filtered_insta)
+    filtered_insta = re.sub(
+        r"^https://www\.instagram\.com/", os.environ["SERVER_URL"], raw_text
+    )
+    sent = await update.message.reply_text(filtered_insta)
+    bot_last_message[update.effective_chat.id] = sent
+    messageObject = next(iter(bot_last_message.values()))
+    if not messageObject.link_preview_options:
+        await editMessage(messageObject,context)
+
+
+async def editMessage(messageObject, context: ContextTypes.DEFAULT_TYPE):
+    print(messageObject)
+    await context.bot.edit_message_text(chat_id=messageObject.chat.id,message_id=messageObject.id,text="Pisdec")
 
 
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(os.environ['TELEGRAM_TOKEN']).build()
+    application = Application.builder().token(os.environ["TELEGRAM_TOKEN"]).build()
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
