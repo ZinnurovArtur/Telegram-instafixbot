@@ -11,10 +11,13 @@ Send instagram reel link and bot reply you with embeded video or photo
 
 import logging
 import os
+import random
 import re
+import time
 from dotenv import load_dotenv
 
-from telegram import ForceReply, Update ,Bot
+from telegram import ForceReply, Update
+import telegram
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -22,6 +25,8 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
+
+from videodownloader import instagramDownload
 
 load_dotenv()
 # Enable logging
@@ -63,12 +68,22 @@ async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_last_message[update.effective_chat.id] = sent
     messageObject = next(iter(bot_last_message.values()))
     if not messageObject.link_preview_options:
-        await editMessage(messageObject,context)
+        await update.message.reply_chat_action(telegram.constants.ChatAction.TYPING)
+        progress_message = await update.message.reply_text("I will try new link")
+
+        time.sleep(random.random() * 2 + 3.0)
+        await progress_message.delete()
+        await editMessage(messageObject, context)
 
 
 async def editMessage(messageObject, context: ContextTypes.DEFAULT_TYPE):
     print(messageObject)
-    await context.bot.edit_message_text(chat_id=messageObject.chat.id,message_id=messageObject.id,text="Pisdec")
+    newUrl = re.sub(
+        rf'{os.environ["SERVER_URL"]}', os.environ["SERVER_URL2"], messageObject.text
+    )
+    await context.bot.edit_message_text(
+        chat_id=messageObject.chat.id, message_id=messageObject.id, text=newUrl
+    )
 
 
 def main() -> None:
