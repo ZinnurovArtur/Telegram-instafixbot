@@ -1,7 +1,7 @@
 # Telegram-instafixbot
 Telegram example for InstaFix without adding dd 
 
-Thanks [InstaFix](http://handlebarsjs.com/](https://github.com/Wikidepia/InstaFix)) for developing this project 
+Thanks [InstaFix](https://github.com/Wikidepia/InstaFix)) for developing this project 
 and [python-telegram-bot](https://docs.python-telegram-bot.org/en/v21.9/index.html) for adding additional tools
 
 This is an example of a bot which allows Instagram user's to see reels without adding additional URL.  <img width="439" alt="Снимок экрана 2024-12-11 в 15 21 28" src="https://github.com/user-attachments/assets/706f23c1-3a93-4bf8-89e9-9fc820f0f938" />
