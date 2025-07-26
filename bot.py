@@ -61,6 +61,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Send a message when the command /sendInsta is issued."""
     if bot_last_message:
         bot_last_message.clear()
     raw_text = update.message.text
@@ -68,10 +69,12 @@ async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
         r"^https://www\.instagram\.com/", os.environ["SERVER_URL"], raw_text
     )
     sent = await update.message.reply_text(filtered_insta)
+    # Adding a delay to get the link preview response
     time.sleep(random.random() * 2 + 3.0)
     bot_last_message[update.effective_chat.id] = sent
     messageObject = next(iter(bot_last_message.values()))
 
+    # if the link previes is not in the messageObject, check urls 
     if not messageObject.link_preview_options or messageObject.link_preview_options.is_disabled:
         await update.message.reply_chat_action(telegram.constants.ChatAction.TYPING)
         progress_message = await update.message.reply_text("Trying new server...⏳")
@@ -93,18 +96,20 @@ async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     return
 
-
+# Handler to convert insta data for sending to telegram
 async def send_converted_insta_file(media_post, context, edited_message):
     if not media_post:
         return
     file_name = f"temp_file.mp4" if "mp4" in media_post else "temp_file.jpg"
 
     try:
+        # Request the media from the url provided
         response = requests.get(media_post, stream=True)
         response.raise_for_status()
         with open(file_name, "wb") as f:
             for chunk in response.iter_content(chunk_size=1024):
                 f.write(chunk)
+            # Send the media to the telegram chat
             with open(file_name, "rb") as converted_file:
                 if "mp4" in media_post:
                     await context.bot.send_video(
@@ -123,6 +128,7 @@ async def send_converted_insta_file(media_post, context, edited_message):
 
 
 async def editMessage(messageObject, context: ContextTypes.DEFAULT_TYPE):
+    """Edit the message function"""
     newUrl = re.sub(
         rf'{os.environ["SERVER_URL"]}', os.environ["SERVER_URL2"], messageObject.text
     )
