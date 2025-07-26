@@ -1,4 +1,4 @@
-# Telegram-instafixbot
+# Telegram-Instafix-bot
 
 A Telegram bot that allows users to view Instagram reels and posts without additional URL modifications.
 
