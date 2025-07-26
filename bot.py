@@ -72,7 +72,7 @@ async def sendInsta(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_last_message[update.effective_chat.id] = sent
     messageObject = next(iter(bot_last_message.values()))
 
-    if not messageObject.link_preview_options:
+    if not messageObject.link_preview_options or messageObject.link_preview_options.is_disabled:
         await update.message.reply_chat_action(telegram.constants.ChatAction.TYPING)
         progress_message = await update.message.reply_text("Trying new server...⏳")
         time.sleep(random.random() * 2 + 3.0)
